@@ -1,0 +1,94 @@
+# Kconfig file for VEIN v1.0
+
+menu "VEIN configuration"
+    # Define CONFIG_VEIN_CONF_SKIP so we can use VEIN
+    # without vein_conf.h file, the vein_conf_internal.h and
+    # vein_kconfig.h files are used instead.
+    config VEIN_CONF_SKIP
+        bool "Nouse custom vein_conf.h"
+        default n
+
+    menu "Fatuer settings"
+        depends on VEIN_CONF_SKIP
+        config VEIN_NAME_MAX_SIZE
+            int "Vein name length"
+            default 32
+            help
+                Number of the intermediate memory buffer used during rendering and other
+
+        config VEIN_DEVICE_HASH_SIZE
+            int "Vein Device hash length"
+            default 64
+            help
+                Number of the intermediate memory buffer used during rendering and other
+
+        config VEIN_DRIVER_HASH_SIZE
+            int "Vein Device hash length"
+            default 64
+            help
+                Number of the intermediate memory buffer used during rendering and other
+    endmenu
+
+    menu "OS settings"
+        depends on VEIN_CONF_SKIP
+
+        config VEIN_USE_OS
+            bool "Enable the emOS module"
+            default n
+
+        config VEIN_USE_FREERTOS
+            bool "Vein use freertos"
+            depends on VEIN_USE_OS
+            default n
+            help
+                Use embedded Freertos
+
+        config VEIN_USE_THREADX
+            bool "Vein use threadx"
+            depends on VEIN_USE_OS
+            default n
+            help
+                Use embedded threadx
+    endmenu
+
+    menu "Logging"
+        depends on VEIN_CONF_SKIP
+        config VEIN_USE_LOG
+            bool "Enable the log module"
+        choice
+            bool "Default log verbosity" if VEIN_USE_LOG
+            default VEIN_LOG_LEVEL_WARN
+            help
+                Specify how important log should be added.
+
+            config VEIN_LOG_LEVEL_TRACE
+                bool "A lot of logs to give detailed information"
+            config VEIN_LOG_LEVEL_INFO
+                bool "Log important events"
+            config VEIN_LOG_LEVEL_WARN
+                bool "Log if something unwanted happened but didn't cause a problem"
+            config VEIN_LOG_LEVEL_ERROR
+                bool "Only critical issues, when the system may fail"
+            config VEIN_LOG_LEVEL_USER
+                bool "Only logs added by the user"
+            config VEIN_LOG_LEVEL_NONE
+                bool "Do not log anything"
+        endchoice
+
+        config VEIN_LOG_LEVEL
+            int
+            default 0 if VEIN_LOG_LEVEL_TRACE
+            default 1 if VEIN_LOG_LEVEL_INFO
+            default 2 if VEIN_LOG_LEVEL_WARN
+            default 3 if VEIN_LOG_LEVEL_ERROR
+            default 4 if VEIN_LOG_LEVEL_USER
+            default 5 if VEIN_LOG_LEVEL_NONE
+
+        config VEIN_LOG_PRINTF
+            bool "Print the log with 'printf'" if VEIN_USE_LOG
+            help
+                Use printf for log output.
+                If not set the user needs to register a callback with `vein_log_register_print_cb`.
+    endmenu
+
+endmenu
