@@ -241,7 +241,7 @@ int vein_register_device(struct vein_device_t * dev)
 	 }
 
     dev->name = vein_alloc_device_name(dev->name, dev->id);
-	if(vein_device_exist(dev->name) != VEIN_OK)
+	if(vein_device_exist(dev->name) == VEIN_OK)
 	 {
 	    VEIN_FREE(dev->name);
 		VEIN_LOG_ERROR("%s register device have existing!\n",dev->name);

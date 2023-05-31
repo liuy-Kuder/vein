@@ -78,7 +78,7 @@ struct vein_device_t * register_at24cxx_dev(struct device_at24cxx_info_t * table
     memcpy(at24cxx_priv, &table->priv_info, sizeof(struct at24cxx_device_priv_t));
 	at24cxx->priv = at24cxx_priv;
 	vein_device_init_basic_if(at24cxx, at24cxx_read, at24cxx_write, at24cxx_ioctl);
-	if(!vein_register_device(at24cxx))
+	if(vein_register_device(at24cxx) != VEIN_OK)
 	 {
 		VEIN_FREE(at24cxx->priv);
 		VEIN_FREE(at24cxx);
